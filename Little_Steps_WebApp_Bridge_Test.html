@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Little Steps – Web App Bridge Test</title>
+<style>
+:root{--sky:#d3ebf9;--cream:#fbf7ed;--paper:#fffdf7;--mint:#83c6a2;--ink:#172d37;--muted:#657780;--line:#d7e3e3;--red:#a33d34;--green:#2f754d}
+*{box-sizing:border-box}body{margin:0;padding:28px 16px;background:var(--cream);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:720px;margin:auto}.card{background:var(--paper);border:1.5px solid var(--ink);border-radius:20px;padding:22px;margin:14px 0;box-shadow:4px 4px 0 var(--ink)}h1{font-size:25px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}.field{display:grid;gap:6px;margin:13px 0}.field label{font-weight:750;font-size:13px}.field input,.field textarea{width:100%;border:1px solid #b9caca;border-radius:11px;padding:11px 12px;background:white;color:var(--ink);font:inherit}.field textarea{min-height:115px;resize:vertical}.hint{font-size:12px;color:var(--muted)}button{border:1.5px solid var(--ink);background:var(--mint);border-radius:12px;padding:11px 16px;font:800 14px system-ui;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}button:disabled{opacity:.55;cursor:not-allowed}.status{border-radius:12px;padding:13px;background:#edf4f4;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.success{background:#e5f4eb;color:var(--green)}.error{background:#fff0ed;color:var(--red)}.small{font-size:11px;color:var(--muted)}iframe{display:none}code{background:#edf2f2;padding:2px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Little Steps – Kiểm tra kết nối Web App</h1>
+    <p class="sub">Phép thử này gửi một POST thật từ GitHub Pages đến Apps Script Web App, rồi nhận câu trả lời từ Gemini.</p>
+    <div class="field">
+      <label for="endpoint">Google Apps Script Web App URL</label>
+      <input id="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="url">
+      <div class="hint">Dùng URL kết thúc bằng <code>/exec</code>, không dùng URL <code>/dev</code>.</div>
+    </div>
+    <div class="field">
+      <label for="password">APP_ACCESS_PASSWORD</label>
+      <input id="password" type="password" autocomplete="off" placeholder="Nhập mật khẩu đã lưu trong Script Properties">
+      <div class="hint">Mật khẩu chỉ được giữ trong trang hiện tại để gửi yêu cầu; không được lưu vào mã nguồn.</div>
+    </div>
+    <div class="field">
+      <label for="message">Tin nhắn thử nghiệm</label>
+      <textarea id="message">Xin chào! Hãy trả lời ngắn gọn bằng tiếng Việt: Little Steps đã kết nối được với Gemini qua Google Apps Script chưa? Hãy nêu tên model đang xử lý nếu hệ thống cung cấp.</textarea>
+    </div>
+    <button id="send">Gửi yêu cầu thử nghiệm</button>
+  </div>
+  <div class="card">
+    <strong>Kết quả</strong>
+    <div id="status" class="status" style="margin-top:10px">Chưa gửi yêu cầu.</div>
+    <p class="small">Nếu chờ quá 90 giây không có phản hồi, phép thử iframe/message có thể bị trình duyệt hoặc Apps Script chặn. Khi đó chúng ta sẽ xử lý riêng, không cần tạo API Key mới.</p>
+  </div>
+</div>
+<iframe id="responseFrame" name="littleStepsResponseFrame" title="Little Steps AI response"></iframe>
+<form id="postForm" method="post" target="littleStepsResponseFrame" enctype="application/x-www-form-urlencoded" style="display:none">
+  <input type="hidden" name="payload" id="payload">
+</form>
+<script>
+(() => {
+  const ALLOWED_PARENT_ORIGIN = "https://lydn-sudo.github.io";
+  const frame = document.getElementById("responseFrame");
+  const form = document.getElementById("postForm");
+  const statusBox = document.getElementById("status");
+  const sendButton = document.getElementById("send");
+  let timer = null;
+  let busy = false;
+
+  function show(text, type) {
+    statusBox.className = "status" + (type ? " " + type : "");
+    statusBox.textContent = text;
+  }
+
+  window.addEventListener("message", (event) => {
+    // Accept messages only from this exact iframe window.
+    if (event.source !== frame.contentWindow) return;
+    const data = event.data;
+    if (!data || data.type !== "LITTLE_STEPS_AI_RESPONSE" || !data.payload) return;
+    clearTimeout(timer);
+    busy = false;
+    sendButton.disabled = false;
+    document.getElementById("password").value = "";
+    document.getElementById("payload").value = "";
+    if (data.payload.ok) {
+      show("KẾT NỐI THÀNH CÔNG\nProvider: " + (data.payload.provider || "gemini") +
+        "\nModel: " + (data.payload.model || "") +
+        "\n\nGemini trả lời:\n" + (data.payload.answer || ""), "success");
+    } else {
+      show("BACKEND TRẢ LỖI\n" + (data.payload.error || "Lỗi không xác định."), "error");
+    }
+  });
+
+  sendButton.addEventListener("click", () => {
+    if (busy) return;
+    const endpoint = document.getElementById("endpoint").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message").value.trim();
+    let parsedUrl;
+    try { parsedUrl = new URL(endpoint); } catch (_) {
+      show("Địa chỉ Web App không hợp lệ. Hãy dùng URL https://script.google.com/macros/s/.../exec", "error");
+      return;
+    }
+    if (parsedUrl.protocol !== "https:" || parsedUrl.hostname !== "script.google.com" || !parsedUrl.pathname.endsWith("/exec")) {
+      show("URL cần là địa chỉ HTTPS của script.google.com và kết thúc bằng /exec.", "error");
+      return;
+    }
+    if (!password) { show("Bạn chưa nhập APP_ACCESS_PASSWORD.", "error"); return; }
+    if (!message) { show("Bạn chưa nhập tin nhắn thử nghiệm.", "error"); return; }
+
+    const payload = {
+      origin: ALLOWED_PARENT_ORIGIN,
+      password,
+      message
+    };
+    document.getElementById("payload").value = JSON.stringify(payload);
+    form.action = endpoint;
+    busy = true;
+    sendButton.disabled = true;
+    show("Đang gửi yêu cầu đến Apps Script và chờ Gemini phản hồi…", "");
+    timer = setTimeout(() => {
+      busy = false;
+      sendButton.disabled = false;
+      document.getElementById("password").value = "";
+      document.getElementById("payload").value = "";
+      show("Hết thời gian chờ sau 90 giây. Chưa nhận được postMessage từ Web App. Điều này chưa chứng minh Gemini lỗi; có thể iframe/redirect bị chặn. Hãy gửi ảnh kết quả để kiểm tra tiếp.", "error");
+    }, 90000);
+    form.submit();
+  });
+})();
+</script>
+</body>
+</html>
