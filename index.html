@@ -133,10 +133,11 @@
         <div class="setting-row"><div><strong>Nhắc tổng kết thứ Bảy</strong><small>Đánh giá tuần và chuẩn bị tuần mới</small></div><input type="checkbox" id="weeklyNotify" checked /></div>
       </div><div class="notice" style="margin-top:13px">Lưu ý: nhắc 22:30 bằng trình duyệt hoạt động khi trang/ứng dụng còn được mở. Thông báo khi đóng hẳn trình duyệt cần PWA kết hợp máy chủ Push; không thể bảo đảm chỉ bằng một file HTML.</div></div>
       <div style="display:grid;gap:14px"><div class="card"><div class="section-head"><div><h2>Kết nối AI – Gemini</h2><p>Kết nối Little Steps với Google Apps Script Web App.</p></div><span class="tag yellow" id="aiConnectionBadge">Chưa cấu hình</span></div><div class="field"><label>Google Apps Script Web App URL</label><input id="aiEndpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="url" /></div><div class="field" style="margin-top:10px"><label>Mật khẩu truy cập APP_ACCESS_PASSWORD</label><input id="aiPassword" type="password" placeholder="Nhập mật khẩu đã lưu trong Script Properties" autocomplete="off" /></div><p style="font-size:10px;color:var(--muted)">URL được lưu trên thiết bị. Mật khẩu chỉ lưu tạm trong sessionStorage của tab hiện tại, không nằm trong LocalStorage, file sao lưu JSON hay mã nguồn GitHub. Đóng tab sẽ cần nhập lại.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="saveEndpoint">Lưu cấu hình</button><button class="primary" id="testAIConnection">Kiểm tra kết nối AI</button><button class="secondary" id="clearAIPassword">Xóa mật khẩu khỏi phiên này</button></div><div id="aiConnectionStatus" class="notice info" style="margin-top:12px">Chưa kiểm tra kết nối từ website. Hãy lưu URL, nhập mật khẩu và nhấn “Kiểm tra kết nối AI”.</div></div>
-      <div class="card"><div class="section-head"><div><h2>Sao lưu & khôi phục</h2><p>Dữ liệu hiện lưu trên trình duyệt này.</p></div></div><div class="notice info" style="margin-bottom:12px">Chưa có đồng bộ đa thiết bị trong bản HTML độc lập. Hãy sao lưu JSON định kỳ để tránh mất dữ liệu.</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" id="exportData">↓ Xuất dữ liệu JSON</button><label class="secondary" style="display:inline-flex;align-items:center;cursor:pointer">↑ Nhập dữ liệu JSON<input type="file" id="importData" accept="application/json" hidden /></label></div></div>
-      <div class="card"><div class="section-head"><div><h2>Trạng thái dữ liệu</h2><p>Thông tin lưu trữ của ứng dụng.</p></div></div><div class="setting-row"><div><strong>Lưu trữ</strong><small>LocalStorage của trình duyệt</small></div><span class="tag green">Đang hoạt động</span></div><div class="setting-row"><div><strong>Đồng bộ trực tuyến</strong><small>Cần backend và tài khoản người dùng</small></div><span class="tag yellow">Chưa triển khai</span></div><div class="setting-row"><div><strong>Phân tích lịch sử cục bộ</strong><small>Thống kê thời lượng và tiến độ</small></div><span class="tag green">Đang hoạt động</span></div></div></div></div>
+      <div class="card" id="cloudSyncCard"><div class="section-head"><div><h2>Đồng bộ giữa PC & iPhone</h2><p>Google Sheets là kho dữ liệu trung tâm của Little Steps.</p></div><span class="tag yellow" id="cloudSyncBadge">Chưa khởi tạo</span></div><div id="cloudSyncStatus" class="notice info" style="margin-bottom:12px">Chưa có bản dữ liệu trên Cloud. Hãy dùng PC đang có dữ liệu để thực hiện lần tải lên đầu tiên.</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" id="cloudBootstrapButton">① Tải dữ liệu PC lên Cloud lần đầu</button><button class="secondary" id="cloudDownloadButton">② Tải dữ liệu mới nhất từ Cloud</button><button class="secondary" id="cloudSyncNowButton">③ Đồng bộ thay đổi lên Cloud</button></div><p style="font-size:10px;color:var(--muted);margin-top:10px">Đồng bộ theo thao tác chủ động ở phiên bản này. Trên PC, tải dữ liệu lên Cloud lần đầu. Trên iPhone, tải dữ liệu từ Cloud xuống. Sau khi chỉnh sửa, nhấn Đồng bộ thay đổi. Nếu phát hiện phiên bản Cloud mới hơn, hệ thống sẽ từ chối ghi đè để bảo vệ dữ liệu.</p></div>
+      <div class="card"><div class="section-head"><div><h2>Sao lưu & khôi phục</h2><p>Sao lưu độc lập với Cloud Sync.</p></div></div><div class="notice info" style="margin-bottom:12px">Cloud Sync không thay thế bản sao lưu JSON. Hãy xuất dữ liệu trước các thao tác thay thế hoặc khôi phục lớn.</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" id="exportData">↓ Xuất dữ liệu JSON</button><label class="secondary" style="display:inline-flex;align-items:center;cursor:pointer">↑ Nhập dữ liệu JSON<input type="file" id="importData" accept="application/json" hidden /></label></div></div>
+      <div class="card"><div class="section-head"><div><h2>Trạng thái dữ liệu</h2><p>Thông tin lưu trữ của ứng dụng.</p></div></div><div class="setting-row"><div><strong>Lưu trữ</strong><small>LocalStorage của trình duyệt</small></div><span class="tag green">Đang hoạt động</span></div><div class="setting-row"><div><strong>Đồng bộ trực tuyến</strong><small>Cần backend và tài khoản người dùng</small></div><span class="tag blue" id="storageCloudSyncState">Đang thiết lập</span></div><div class="setting-row"><div><strong>Phân tích lịch sử cục bộ</strong><small>Thống kê thời lượng và tiến độ</small></div><span class="tag green">Đang hoạt động</span></div></div></div></div>
     </section>
-    <div class="footer-note">Little Steps · Plan gently, grow consistently · Dữ liệu được lưu trên thiết bị của bạn</div>
+    <div class="footer-note">Little Steps · Plan gently, grow consistently · Dữ liệu được lưu cục bộ và có thể đồng bộ Cloud theo thao tác</div>
   </main>
 </div>
 
@@ -159,10 +160,14 @@ let data=load();let timerInterval=null;let planningDraft=[];
 const AI_SESSION_PASSWORD_KEY='littleStepsAiAccessPassword.session';
 const AI_ALLOWED_MESSAGE_ORIGINS=new Set(['https://script.google.com','https://script.googleusercontent.com']);
 let aiPopup=null,aiPopupTimer=null,aiActiveRequestId=null,aiActiveCallback=null,pendingAIClarification=null;
+let aiActiveMessageType='LITTLE_STEPS_AI_RESPONSE';
+const CLOUD_META_KEY='littleStepsCloudSyncMeta.v1';
+let cloudMeta=loadCloudMeta();
+let suppressCloudDirty=false;
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s?merge(clone(base),s):clone(base)}catch(e){return clone(base)}}
 function merge(a,b){for(const k in b){if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==='object')a[k]=merge(a[k],b[k]);else a[k]=b[k]}return a}
-function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));if(cloudMeta.initialized&&!suppressCloudDirty){cloudMeta.dirty=true;storeCloudMeta()}renderAll();renderCloudSyncUI()}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
 function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function dayLog(){return data.habitLogs[today()]||(data.habitLogs[today()]={})}
@@ -250,48 +255,55 @@ function buildAIPlanningPrompt(raw, clarification){
 }
 function generateRequestId(){return (crypto.randomUUID?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2))).replace(/[^A-Za-z0-9_-]/g,'');}
 function isTrustedAppsScriptOrigin(origin){try{const u=new URL(origin);return u.hostname==='script.google.com'||u.hostname==='script.googleusercontent.com'||u.hostname.endsWith('.googleusercontent.com')}catch(e){return false}}
-function sendLittleStepsAI(message,onSuccess,onError){
+function sendLittleStepsBackend(requestFields,messageType,onSuccess,onError){
   const endpoint=(data.settings.aiEndpoint||'').trim();
   const password=sessionStorage.getItem(AI_SESSION_PASSWORD_KEY)||$('#aiPassword')?.value.trim()||'';
   if(!endpoint){toast('Chưa cấu hình URL Apps Script trong Cài đặt.');page('settings');return false}
-  if(!password){toast('Chưa có mật khẩu truy cập trong phiên này. Hãy nhập ở Cài đặt AI.');page('settings');$('#aiPassword').focus();return false}
+  if(!password){toast('Chưa có mật khẩu APP_ACCESS_PASSWORD trong phiên này. Hãy nhập ở Cài đặt AI.');page('settings');$('#aiPassword').focus();return false}
   let parsed;try{parsed=new URL(endpoint)}catch(e){toast('URL Apps Script chưa hợp lệ.');page('settings');return false}
   if(parsed.protocol!=='https:'||parsed.hostname!=='script.google.com'||!parsed.pathname.endsWith('/exec')){toast('Hãy sử dụng URL HTTPS script.google.com kết thúc bằng /exec.');page('settings');return false}
-  if(aiPopup&&!aiPopup.closed){toast('Một yêu cầu AI đang mở. Hãy hoàn tất hoặc đóng popup trước.');return false}
+  if(aiPopup&&!aiPopup.closed){toast('Một yêu cầu đang mở. Hãy hoàn tất hoặc đóng popup trước.');return false}
   const requestId=generateRequestId();
-  const popupName='LittleStepsAI_'+requestId;
-  // Must be opened synchronously inside the originating button click.
+  const popupName='LittleSteps_'+requestId;
+  // Popup must be opened synchronously from the user's button click.
   aiPopup=window.open('about:blank',popupName,'popup=yes,width=560,height=520,resizable=yes,scrollbars=yes');
-  if(!aiPopup){toast('Chrome đã chặn cửa sổ popup. Hãy cho phép popup cho website Little Steps.');return false}
-  aiActiveRequestId=requestId;aiActiveCallback={onSuccess,onError};
-  const payload={origin:location.origin,password,message,requestId};
+  if(!aiPopup){toast('Chrome đã chặn popup. Hãy cho phép popup cho website Little Steps.');return false}
+  aiActiveRequestId=requestId;aiActiveCallback={onSuccess,onError};aiActiveMessageType=messageType;
+  const payload=Object.assign({origin:location.origin,password,requestId},requestFields||{});
   const form=$('#littleStepsAIForm');form.action=endpoint;form.target=popupName;$('#littleStepsAIPayload').value=JSON.stringify(payload);
-  const sendButton=$('#planButton');if(sendButton)sendButton.disabled=true;
+  const planButton=$('#planButton');if(planButton)planButton.disabled=true;
   form.submit();
   if(aiPopupTimer)clearTimeout(aiPopupTimer);
   aiPopupTimer=setTimeout(()=>{
     if(aiActiveRequestId!==requestId)return;
-    if(sendButton)sendButton.disabled=false;
+    if(planButton)planButton.disabled=false;
     if(aiPopup&&!aiPopup.closed)aiPopup.close();
-    aiPopup=null;aiActiveRequestId=null;
+    aiPopup=null;aiActiveRequestId=null;aiActiveMessageType='LITTLE_STEPS_AI_RESPONSE';
     const cb=aiActiveCallback;aiActiveCallback=null;
-    if(cb&&cb.onError)cb.onError(new Error('Đã chờ 90 giây nhưng chưa nhận được phản hồi. Hãy kiểm tra popup Apps Script hoặc quyền popup của Chrome.'));
+    if(cb&&cb.onError)cb.onError(new Error('Đã chờ 90 giây nhưng chưa nhận được phản hồi. Hãy kiểm tra popup hoặc quyền popup của Chrome.'));
   },90000);
   return true;
 }
+function sendLittleStepsAI(message,onSuccess,onError){
+  return sendLittleStepsBackend({action:'ai.chat',message},'LITTLE_STEPS_AI_RESPONSE',onSuccess,onError);
+}
+function sendLittleStepsSync(action,fields,onSuccess,onError){
+  return sendLittleStepsBackend(Object.assign({action:action},fields||{}),'LITTLE_STEPS_SYNC_RESPONSE',onSuccess,onError);
+}
 window.addEventListener('message',function(event){
   if(!isTrustedAppsScriptOrigin(event.origin))return;
-  const msg=event.data;if(!msg||msg.type!=='LITTLE_STEPS_AI_RESPONSE'||!msg.payload)return;
+  const msg=event.data;if(!msg||!msg.payload||msg.type!==aiActiveMessageType)return;
   if(!aiActiveRequestId||msg.payload.requestId!==aiActiveRequestId)return;
   if(aiPopupTimer)clearTimeout(aiPopupTimer);
   if(aiPopup&&!aiPopup.closed)aiPopup.close();aiPopup=null;
   const planButton=$('#planButton');if(planButton)planButton.disabled=false;
   const callback=aiActiveCallback;aiActiveCallback=null;aiActiveRequestId=null;
+  const receivedType=aiActiveMessageType;aiActiveMessageType='LITTLE_STEPS_AI_RESPONSE';
   if(msg.payload.ok){
-    updateAIConnectionUI(true,msg.payload.model);
+    if(receivedType==='LITTLE_STEPS_AI_RESPONSE')updateAIConnectionUI(true,msg.payload.model);
     if(callback&&callback.onSuccess)callback.onSuccess(msg.payload);
   }else{
-    updateAIConnectionUI(false,'');
+    if(receivedType==='LITTLE_STEPS_AI_RESPONSE')updateAIConnectionUI(false,'');
     if(callback&&callback.onError)callback.onError(new Error(msg.payload.error||'Backend trả về lỗi không xác định.'));
   }
 });
@@ -388,6 +400,66 @@ function maybeAI(){const endpoint=data.settings.aiEndpoint;if(!endpoint){toast('
 function openAction(type){if(type==='task')taskForm();if(type==='goal')goalForm();if(type==='project')projectForm();if(type==='review')reviewForm();if(type==='pwp')taskForm({title:'Đọc sách PWP',category:'Đọc sách PWP',estimate:30,criteria:'Ghi lại nội dung/ý chính đã đọc',status:'todo'})}
 function reviewForm(){const todayTasks=data.tasks.filter(t=>t.date===today());const done=todayTasks.filter(t=>t.status==='done').length;openModal('Tổng kết ngày',`<div class="notice info" style="margin-bottom:12px">Hôm nay có ${done}/${todayTasks.length} nhiệm vụ hoàn thành. Tổng kết không phải để tự phán xét, mà để hiểu điều gì cần điều chỉnh.</div><div class="form-grid"><div class="field full"><label>Điều gì đã diễn ra tốt hôm nay?</label><textarea id="rGood" placeholder="Một kết quả hoặc hành động đáng ghi nhận..."></textarea></div><div class="field full"><label>Điều gì chưa hoàn thành hoặc chưa đạt chất lượng?</label><textarea id="rBlock" placeholder="Mô tả ngắn gọn..."></textarea></div><div class="field full"><label>Nguyên nhân chính</label><select id="rCause"><option>Ước lượng thời gian chưa sát</option><option>Ưu tiên chưa phù hợp</option><option>Mất tập trung / trì hoãn</option><option>Công việc phát sinh / bị gián đoạn</option><option>Thiếu thông tin hoặc kỹ năng</option><option>Khối lượng quá lớn</option><option>Chất lượng đầu ra cần chỉnh sửa</option><option>Khác / chưa xác định</option></select></div><div class="field"><label>Năng lượng hôm nay (1–5)</label><select id="rEnergy">${[1,2,3,4,5].map(n=>`<option value="${n}">${n}</option>`).join('')}</select></div><div class="field"><label>Mức độ tập trung (1–5)</label><select id="rFocus">${[1,2,3,4,5].map(n=>`<option value="${n}">${n}</option>`).join('')}</select></div><div class="field full"><label>Một điều muốn cải thiện vào ngày mai</label><textarea id="rNext" placeholder="Ví dụ: chỉ chọn 3 việc quan trọng, chia nhỏ nhiệm vụ thiết kế..."></textarea></div></div>`, '<button class="secondary" id="cancelModal">Để sau</button><button class="primary" id="saveReview">Lưu tổng kết</button>');$('#cancelModal').onclick=closeModal;$('#saveReview').onclick=()=>{data.reviews.push({id:uid(),date:today(),good:$('#rGood').value,block:$('#rBlock').value,cause:$('#rCause').value,energy:+$('#rEnergy').value,focus:+$('#rFocus').value,next:$('#rNext').value,done,total:todayTasks.length});save();closeModal();toast('Đã lưu tổng kết hôm nay.')}}
 function addHabit(){openModal('Thêm thói quen',`<div class="form-grid"><div class="field full"><label>Tên thói quen *</label><input id="hName" placeholder="Ví dụ: Viết giỏ cảm tạ" /></div><div class="field full"><label>Mô tả / cách ghi nhận</label><textarea id="hDetail" placeholder="Khi nào được tính là đã duy trì?"></textarea></div></div>`,'<button class="secondary" id="cancelModal">Hủy</button><button class="primary" id="saveHabit">Thêm thói quen</button>');$('#cancelModal').onclick=closeModal;$('#saveHabit').onclick=()=>{const name=$('#hName').value.trim();if(!name){toast('Nhập tên thói quen.');return}data.habits.push({id:uid(),name,detail:$('#hDetail').value.trim(),active:true});closeModal();save()}}
+function loadCloudMeta(){
+  try{return Object.assign({initialized:false,revision:0,dirty:false,lastSyncAt:null,deviceId:'device_'+Math.random().toString(36).slice(2,12)},JSON.parse(localStorage.getItem(CLOUD_META_KEY)||'{}'))}
+  catch(e){return {initialized:false,revision:0,dirty:false,lastSyncAt:null,deviceId:'device_'+Math.random().toString(36).slice(2,12)}}
+}
+function storeCloudMeta(){localStorage.setItem(CLOUD_META_KEY,JSON.stringify(cloudMeta))}
+function hasMeaningfulLocalData(){
+  return (data.tasks||[]).length>0||(data.goals||[]).length>0||(data.projects||[]).length>0||(data.reviews||[]).length>0||(data.history||[]).length>0||Object.keys(data.habitLogs||{}).length>0||Object.keys((data.speech||{}).notes||{}).length>0||Object.keys((data.speech||{}).lessons||{}).length>0;
+}
+function formatCloudTime(value){if(!value)return 'chưa có';const d=new Date(value);return isNaN(d.getTime())?String(value):d.toLocaleString('vi-VN')}
+function renderCloudSyncUI(message){
+  const badge=$('#cloudSyncBadge'),status=$('#cloudSyncStatus'),state=$('#storageCloudSyncState');
+  if(!badge||!status)return;
+  if(!cloudMeta.initialized){badge.className='tag yellow';badge.textContent='Chưa liên kết thiết bị';status.className='notice info';status.textContent=message||'Cloud đã được khởi tạo. Hãy dùng PC đang có dữ liệu để tải bản đầu tiên lên Cloud.';if(state){state.className='tag yellow';state.textContent='Chưa liên kết'}return}
+  if(cloudMeta.dirty){badge.className='tag yellow';badge.textContent='Có thay đổi chưa đồng bộ';status.className='notice info';status.textContent=message||('Thiết bị này đang có thay đổi chưa đồng bộ. Phiên bản Cloud gần nhất: '+cloudMeta.revision+'. Lần đồng bộ: '+formatCloudTime(cloudMeta.lastSyncAt)+'.');if(state){state.className='tag yellow';state.textContent='Chưa đồng bộ'}return}
+  badge.className='tag green';badge.textContent='Đã liên kết · v'+cloudMeta.revision;status.className='notice success';status.textContent=message||('Dữ liệu thiết bị đã khớp với Cloud ở phiên bản '+cloudMeta.revision+'. Đồng bộ gần nhất: '+formatCloudTime(cloudMeta.lastSyncAt)+'.');if(state){state.className='tag green';state.textContent='Đã liên kết'}
+}
+function syncFailure(error){toast('Đồng bộ chưa thành công: '+(error&&error.message?error.message:String(error)));renderCloudSyncUI('Đồng bộ chưa thành công: '+(error&&error.message?error.message:String(error)))}
+function bootstrapPcToCloud(){
+  if(cloudMeta.initialized){toast('Thiết bị này đã liên kết Cloud. Hãy dùng “Đồng bộ thay đổi lên Cloud”.');return}
+  if(!confirm('Đây là lần tải dữ liệu ĐẦU TIÊN từ PC lên Cloud. Máy chủ chỉ chấp nhận nếu Cloud chưa có snapshot; nếu Cloud đã có dữ liệu, yêu cầu sẽ bị từ chối và không ghi đè. Bạn đã sao lưu JSON và muốn tiếp tục?'))return;
+  renderCloudSyncUI('Đang tải dữ liệu hiện có trên thiết bị này lên Cloud…');
+  sendLittleStepsSync('sync.bootstrap',{snapshot:clone(data)},payload=>{
+    cloudMeta={...cloudMeta,initialized:true,revision:payload.revision,dirty:false,lastSyncAt:payload.updatedAt||new Date().toISOString()};storeCloudMeta();
+    renderCloudSyncUI('Đã tải dữ liệu PC lên Cloud thành công. Phiên bản Cloud: '+payload.revision+'. Bây giờ iPhone có thể tải dữ liệu này xuống.');
+    toast('Đã đưa dữ liệu PC lên Cloud thành công.');
+  },syncFailure);
+}
+function downloadFromCloud(){
+  const localHasData=hasMeaningfulLocalData();
+  if(localHasData&&!confirm('Tải dữ liệu Cloud sẽ THAY THẾ dữ liệu hiện có trên thiết bị này. Hãy xuất JSON sao lưu trước nếu dữ liệu cục bộ có thay đổi. Tiếp tục?'))return;
+  renderCloudSyncUI('Đang tải bản dữ liệu mới nhất từ Cloud…');
+  sendLittleStepsSync('sync.load',{},payload=>{
+    if(!payload.hasSnapshot||!payload.snapshot){renderCloudSyncUI('Cloud chưa có bản dữ liệu ban đầu. Hãy thực hiện tải dữ liệu từ PC lên Cloud trước.');toast('Cloud chưa có snapshot.');return}
+    const restored=merge(clone(base),payload.snapshot);
+    suppressCloudDirty=true;
+    data=restored;
+    localStorage.setItem(KEY,JSON.stringify(data));
+    suppressCloudDirty=false;
+    cloudMeta={...cloudMeta,initialized:true,revision:payload.revision,dirty:false,lastSyncAt:payload.updatedAt||new Date().toISOString()};storeCloudMeta();
+    renderAll();setupSettings();renderCloudSyncUI('Đã tải dữ liệu Cloud về thiết bị này thành công. Phiên bản '+payload.revision+'.');
+    toast('Đã khôi phục dữ liệu Cloud về thiết bị.');
+  },syncFailure);
+}
+function syncLocalChangesToCloud(){
+  if(!cloudMeta.initialized){toast('Thiết bị này chưa liên kết Cloud. Trên PC hãy tải dữ liệu lên lần đầu; trên iPhone hãy tải dữ liệu từ Cloud xuống.');return}
+  if(!cloudMeta.dirty){toast('Không có thay đổi mới cần đồng bộ.');return}
+  if(!confirm('Gửi toàn bộ dữ liệu hiện tại trên thiết bị này lên Cloud? Nếu Cloud đã có phiên bản mới hơn, máy chủ sẽ từ chối ghi đè để bảo vệ dữ liệu.'))return;
+  renderCloudSyncUI('Đang đồng bộ các thay đổi lên Cloud…');
+  sendLittleStepsSync('sync.save',{expectedRevision:cloudMeta.revision,snapshot:clone(data)},payload=>{
+    cloudMeta={...cloudMeta,revision:payload.revision,dirty:false,lastSyncAt:payload.updatedAt||new Date().toISOString()};storeCloudMeta();
+    renderCloudSyncUI('Đồng bộ thành công. Cloud hiện ở phiên bản '+payload.revision+'.');
+    toast('Đã đồng bộ dữ liệu lên Cloud.');
+  },error=>{
+    if(String(error.message||'').includes('newer data')||String(error.message||'').includes('REVISION_CONFLICT')){
+      renderCloudSyncUI('Cloud đã có dữ liệu mới hơn. Hệ thống chưa ghi đè. Hãy xuất JSON sao lưu dữ liệu cục bộ, sau đó tải bản Cloud mới nhất về hoặc xử lý xung đột trước khi tiếp tục.');
+    }
+    syncFailure(error);
+  });
+}
+
 function setupSettings(){const s=data.settings;$('#workStart').value=s.workStart;$('#workEnd').value=s.workEnd;$('#reminderTime').value=s.reminderTime;$('#inAppNotify').checked=s.inAppNotify;$('#midweekNotify').checked=s.midweekNotify;$('#weeklyNotify').checked=s.weeklyNotify;$('#aiEndpoint').value=s.aiEndpoint||'';$('#aiPassword').value=sessionStorage.getItem(AI_SESSION_PASSWORD_KEY)||'';updateAIConnectionUI()}
 function saveSettings(){data.settings.workStart=$('#workStart').value;data.settings.workEnd=$('#workEnd').value;data.settings.reminderTime=$('#reminderTime').value;data.settings.inAppNotify=$('#inAppNotify').checked;data.settings.midweekNotify=$('#midweekNotify').checked;data.settings.weeklyNotify=$('#weeklyNotify').checked;save();scheduleReminder();toast('Đã lưu cài đặt.')}
 function scheduleReminder(){if(window._littleReminder)clearInterval(window._littleReminder);window._littleReminder=setInterval(()=>{const now=new Date(),hh=String(now.getHours()).padStart(2,'0'),mm=String(now.getMinutes()).padStart(2,'0'),key=today()+'-'+hh+mm;if(hh+':'+mm===data.settings.reminderTime&&localStorage.getItem('littleReminderFired')!==key){localStorage.setItem('littleReminderFired',key);notify('Đã đến lúc chuẩn bị ngày mai','Dành 5–10 phút để cùng AI rà soát và chuẩn bị kế hoạch ngày tiếp theo nhé.')}if(now.getDay()===2&&hh==='16'&&mm==='30'&&data.settings.midweekNotify&&localStorage.getItem('littleMidFired')!==today()) {localStorage.setItem('littleMidFired',today());notify('Báo cáo giữa tuần','Mình cùng xem lại mục tiêu từ Chủ nhật đến hôm nay nhé.')}if(now.getDay()===6&&hh==='16'&&mm==='30'&&data.settings.weeklyNotify&&localStorage.getItem('littleWeekFired')!==today()){localStorage.setItem('littleWeekFired',today());notify('Tổng kết tuần','Đã đến lúc nhìn lại tuần và chuẩn bị mục tiêu tuần tiếp theo.')}},20000)}
@@ -405,6 +477,9 @@ function bind(){
   $('#closeModal').onclick=closeModal;$('#modalBackdrop').onclick=e=>{if(e.target.id==='modalBackdrop')closeModal()};
   $('#addHabitBtn').onclick=addHabit;$('#speechLesson').onchange=e=>renderSpeech(e.target.value);$('#speechNote').onchange=()=>{const k=$('#speechLesson').value;data.speech.notes[k]=$('#speechNote').value;save()};
   ['workStart','workEnd','reminderTime','inAppNotify','midweekNotify','weeklyNotify'].forEach(id=>$('#'+id).addEventListener('change',saveSettings));
+  $('#cloudBootstrapButton').onclick=bootstrapPcToCloud;
+  $('#cloudDownloadButton').onclick=downloadFromCloud;
+  $('#cloudSyncNowButton').onclick=syncLocalChangesToCloud;
   $('#saveEndpoint').onclick=saveAIConnection;
   $('#testAIConnection').onclick=testAIConnection;
   $('#clearAIPassword').onclick=()=>{sessionStorage.removeItem(AI_SESSION_PASSWORD_KEY);$('#aiPassword').value='';updateAIConnectionUI(false,'');toast('Đã xóa mật khẩu khỏi phiên trình duyệt này.')};
@@ -413,7 +488,7 @@ function bind(){
   $('#enableNotifications').onclick=async()=>{if(!('Notification'in window)){toast('Trình duyệt này chưa hỗ trợ Notification API.');return}const p=await Notification.requestPermission();toast(p==='granted'?'Đã cấp quyền thông báo.':'Chưa cấp quyền thông báo.')};
   $('#exportData').onclick=exportData;$('#importData').onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value=''};
 }
-function init(){bind();setupSettings();if($('#planDate'))$('#planDate').value=today();renderAll();scheduleReminder();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+function init(){bind();setupSettings();if($('#planDate'))$('#planDate').value=today();renderAll();renderCloudSyncUI();scheduleReminder();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 init();
 })();
 </script>
